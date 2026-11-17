@@ -158,7 +158,7 @@ class SyncOrdersCommandTest extends TestCase
             options: [],
         );
         $this->assertGreaterThan(
-            expected: 0,
+            0,
             actual: $statusCode,
         );
 
@@ -226,7 +226,7 @@ class SyncOrdersCommandTest extends TestCase
             options: [],
         );
         $this->assertGreaterThan(
-            expected: 0,
+            0,
             actual: $statusCode,
         );
 
@@ -616,7 +616,7 @@ class SyncOrdersCommandTest extends TestCase
             options: [],
         );
         $this->assertGreaterThan(
-            expected: 0,
+            0,
             actual: $statusCode,
         );
 
@@ -1867,7 +1867,7 @@ class SyncOrdersCommandTest extends TestCase
             options: [],
         );
         $this->assertGreaterThan(
-            expected: 0,
+            0,
             actual: $statusCode,
         );
 

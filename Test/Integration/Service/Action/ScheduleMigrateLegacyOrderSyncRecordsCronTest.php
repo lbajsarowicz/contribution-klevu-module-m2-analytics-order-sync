@@ -13,6 +13,7 @@ use Klevu\AnalyticsOrderSyncApi\Service\Action\ScheduleMigrateLegacyOrderSyncRec
 use Klevu\TestFixtures\Traits\ObjectInstantiationTrait;
 use Klevu\TestFixtures\Traits\TestImplementsInterfaceTrait;
 use Klevu\TestFixtures\Traits\TestInterfacePreferenceTrait;
+use Magento\Cron\Model\ResourceModel\Schedule as CronScheduleResource;
 use Magento\Cron\Model\ResourceModel\Schedule\Collection as CronScheduleCollection;
 use Magento\Cron\Model\ResourceModel\Schedule\CollectionFactory as CronScheduleCollectionFactory;
 use Magento\Cron\Model\Schedule as CronSchedule;
@@ -81,8 +82,13 @@ class ScheduleMigrateLegacyOrderSyncRecordsCronTest extends TestCase
             );
 
         $mockCronScheduleObject = $this->getMockCronScheduleObject();
-        $mockCronScheduleObject->expects($this->once())
+        $mockCronScheduleResource = $this->getMockBuilder(CronScheduleResource::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['save'])
+            ->getMock();
+        $mockCronScheduleResource->expects($this->once())
             ->method('save')
+            ->with($mockCronScheduleObject)
             ->willThrowException(
                 exception: new CouldNotSaveException(
                     phrase: __('Test exception'),
@@ -98,6 +104,7 @@ class ScheduleMigrateLegacyOrderSyncRecordsCronTest extends TestCase
             arguments: [
                 'logger' => $mockLogger,
                 'cronScheduleFactory' => $mockCronScheduleFactory,
+                'cronScheduleResource' => $mockCronScheduleResource,
             ],
         );
 
@@ -168,12 +175,12 @@ class ScheduleMigrateLegacyOrderSyncRecordsCronTest extends TestCase
         );
         $createdAtUnixtime = strtotime($newCronSchedule->getCreatedAt());
         $this->assertLessThanOrEqual(
-            expected: 30,
+            30,
             actual: time() - $createdAtUnixtime,
             message: 'Cron schedule created within 30 seconds',
         );
         $this->assertGreaterThanOrEqual(
-            expected: 0,
+            0,
             actual: time() - $createdAtUnixtime,
             message: 'Cron schedule created after 0 seconds',
         );
@@ -231,12 +238,12 @@ class ScheduleMigrateLegacyOrderSyncRecordsCronTest extends TestCase
         );
         $createdAtUnixtime = strtotime($newCronSchedule->getCreatedAt());
         $this->assertLessThanOrEqual(
-            expected: 30,
+            30,
             actual: time() - $createdAtUnixtime,
             message: 'Cron schedule created within 30 seconds',
         );
         $this->assertGreaterThanOrEqual(
-            expected: 0,
+            0,
             actual: time() - $createdAtUnixtime,
             message: 'Cron schedule created after 0 seconds',
         );
@@ -300,7 +307,7 @@ class ScheduleMigrateLegacyOrderSyncRecordsCronTest extends TestCase
     {
         return $this->getMockBuilder(CronSchedule::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['save'])
+            ->onlyMethods([])
             ->getMock();
     }
 
