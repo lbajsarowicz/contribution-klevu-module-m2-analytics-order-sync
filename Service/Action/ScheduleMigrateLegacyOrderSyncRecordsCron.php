@@ -10,6 +10,7 @@ namespace Klevu\AnalyticsOrderSync\Service\Action;
 
 use Klevu\AnalyticsOrderSync\Cron\MigrateLegacyOrderSyncRecords as MigrateLegacyOrderSyncRecordsCron;
 use Klevu\AnalyticsOrderSyncApi\Service\Action\ScheduleMigrateLegacyOrderSyncRecordsCronActionInterface;
+use Magento\Cron\Model\ResourceModel\Schedule as CronScheduleResource;
 use Magento\Cron\Model\Schedule as CronSchedule;
 use Magento\Cron\Model\ScheduleFactory as CronScheduleFactory;
 use Psr\Log\LoggerInterface;
@@ -26,15 +27,23 @@ class ScheduleMigrateLegacyOrderSyncRecordsCron implements ScheduleMigrateLegacy
     private readonly CronScheduleFactory $cronScheduleFactory;
 
     /**
+     * @var CronScheduleResource
+     */
+    private readonly CronScheduleResource $cronScheduleResource;
+
+    /**
      * @param LoggerInterface $logger
      * @param CronScheduleFactory $cronScheduleFactory
+     * @param CronScheduleResource $cronScheduleResource
      */
     public function __construct(
         LoggerInterface $logger,
         CronScheduleFactory $cronScheduleFactory,
+        CronScheduleResource $cronScheduleResource,
     ) {
         $this->logger = $logger;
         $this->cronScheduleFactory = $cronScheduleFactory;
+        $this->cronScheduleResource = $cronScheduleResource;
     }
 
     public function execute(
@@ -44,8 +53,7 @@ class ScheduleMigrateLegacyOrderSyncRecordsCron implements ScheduleMigrateLegacy
 
         $return = true;
         try {
-            // No repository for cron schedule
-            $cronSchedule->save();
+            $this->cronScheduleResource->save($cronSchedule);
 
             $this->logger->info(
                 message: 'Scheduled migration of legacy order sync records for {scheduleTime}',

@@ -119,11 +119,11 @@ class MigrateLegacyOrderSyncRecordsAfterIntegrationTest extends TestCase
         $cronSchedule = $finalCronScheduleCollection->getFirstItem();
         $scheduledAtUnixtime = strtotime($cronSchedule->getScheduledAt());
         $this->assertGreaterThanOrEqual(
-            expected: time(),
+            time(),
             actual: $scheduledAtUnixtime,
         );
         $this->assertLessThanOrEqual(
-            expected: time() + 300,
+            time() + 300,
             actual: $scheduledAtUnixtime,
         );
     }
