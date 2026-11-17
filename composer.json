@@ -24,7 +24,11 @@
     "require-dev": {
         "klevu/module-m2-test-fixtures": "*",
         "tddwizard/magento2-fixtures": "*",
-        "klevu/php-sdk": "@stable"
+        "klevu/php-sdk": "@stable",
+        "magento/magento-coding-standard": "^41",
+        "phpstan/phpstan": "^2.1",
+        "bitexpert/phpstan-magento": "^0.44",
+        "phpstan/extension-installer": "^1.4"
     },
     "type": "magento2-module",
     "version": "2.1.1",
@@ -44,6 +48,12 @@
         ],
         "psr-4": {
             "Klevu\\AnalyticsOrderSync\\": ""
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
         }
     }
 }
